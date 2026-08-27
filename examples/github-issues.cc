@@ -33,74 +33,15 @@ typedef struct {
   size_t size; // response size of data
 } MEMFILE;
 
-MEMFILE *memfopen() {
-  MEMFILE *mf = (MEMFILE *)malloc(sizeof(MEMFILE));
-  mf->data = NULL;
-  mf->size = 0;
-  return mf;
-}
+MEMFILE *memfopen() { __builtin_trap() /* STUB: not implemented */; }
 
-void memfclose(MEMFILE *mf) {
-  if (mf->data)
-    free(mf->data);
-  free(mf);
-}
+void memfclose(MEMFILE *mf) { __builtin_trap() /* STUB: not implemented */; }
 
-size_t memfwrite(char *ptr, size_t size, size_t nmemb, void *stream) {
-  MEMFILE *mf = (MEMFILE *)stream;
-  int block = size * nmemb;
-  if (!mf->data)
-    mf->data = (char *)malloc(block);
-  else
-    mf->data = (char *)realloc(mf->data, mf->size + block);
-  if (mf->data) {
-    memcpy(mf->data + mf->size, ptr, block);
-    mf->size += block;
-  }
-  return block;
-}
+size_t memfwrite(char *ptr, size_t size, size_t nmemb, void *stream) { __builtin_trap() /* STUB: not implemented */; }
 
-char *memfstrdup(MEMFILE *mf) {
-  char *buf = (char *)malloc(mf->size + 1);
-  memcpy(buf, mf->data, mf->size);
-  buf[mf->size] = 0;
-  return buf;
-}
+char *memfstrdup(MEMFILE *mf) { __builtin_trap() /* STUB: not implemented */; }
 
 using namespace std;
 using namespace picojson;
 
-int main(int argc, char *argv[]) {
-  char error[256];
-
-  MEMFILE *mf = memfopen();
-  CURL *curl = curl_easy_init();
-  curl_easy_setopt(curl, CURLOPT_URL, "https://api.github.com/repos/kazuho/picojson/issues");
-  curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
-  curl_easy_setopt(curl, CURLOPT_USERAGENT, "curl");
-  curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, &error);
-  curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, memfwrite);
-  curl_easy_setopt(curl, CURLOPT_WRITEDATA, mf);
-  if (curl_easy_perform(curl) != CURLE_OK) {
-    cerr << error << endl;
-  } else {
-    value v;
-    string err;
-    parse(v, mf->data, mf->data + mf->size, &err);
-    if (err.empty()) {
-      array arr = v.get<array>();
-      array::iterator it;
-      for (it = arr.begin(); it != arr.end(); it++) {
-        object obj = it->get<object>();
-        cout << "#" << obj["number"].to_str() << ": " << obj["title"].to_str() << endl;
-        cout << "  " << obj["html_url"].to_str() << endl << endl;
-      }
-    } else {
-      cerr << err << endl;
-    }
-  }
-  curl_easy_cleanup(curl);
-  memfclose(mf);
-
-  return 0;
-}
+int main(int argc, char *argv[]) { __builtin_trap() /* STUB: not implemented */; }
